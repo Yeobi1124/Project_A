@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class Anchor : MonoBehaviour
 {
+    public enum State {Idle, Running, Success, Failure};
+    public State currentState;
     public int speed;
     Rigidbody2D rigid;
     Vector2 dir;
-    Camera cam;
-
-    public GameObject player; //temp
 
     private void Awake() {
         rigid = GetComponent<Rigidbody2D>();
-        cam = GameObject.Find("Main Camera").GetComponent<Camera>();
+
+        currentState = State.Idle;
     }
 
     private void OnTriggerEnter2D(Collider2D other) {
@@ -22,8 +22,8 @@ public class Anchor : MonoBehaviour
         }
     }
 
-    public void Act(){
-        dir = (cam.ScreenToWorldPoint(Input.mousePosition) - player.transform.position).normalized;
+    public void Act(Vector2 dir){
+        this.dir = dir;
         rigid.bodyType = RigidbodyType2D.Dynamic;
     }
 

@@ -10,22 +10,24 @@ public class Player : MonoBehaviour
     public int speed;
     public int jumpPower;
     public Anchor anchor;
-    public RopeSet rope;
+    public RopeSegements ropePool;
 
     float dir;
     Rigidbody2D rigid;
-    HingeJoint2D hingeJoint;
+    HingeJoint2D hinge;
 
     Vector2 vecHorizion;
     Vector2 vecVertical;
+    Camera cam;
 
     public bool isJump;
-    // Start is called before the first frame update
+    public Rope rope;
     void Awake()
     {
         rigid = GetComponent<Rigidbody2D>();
         isJump = false;
-        hingeJoint = GetComponent<HingeJoint2D>();
+        hinge = GetComponent<HingeJoint2D>();
+        cam = GameObject.Find("Main Camera").GetComponent<Camera>();
     }
 
     // Update is called once per frame
@@ -61,18 +63,16 @@ public class Player : MonoBehaviour
 
     public void OnMouse(InputAction.CallbackContext context){
         if(context.started){
-            anchor.gameObject.SetActive(true);
-            anchor.transform.position = transform.position;
-            anchor.Act();
+            rope.Shoot(cam.ScreenToWorldPoint(Input.mousePosition) - transform.position);
             
-            rope.gameObject.SetActive(true);
-            rope.transform.position = transform.position;
+            ropePool.gameObject.SetActive(true);
+            ropePool.transform.position = transform.position;
 
-            hingeJoint.connectedBody = rope.children[rope.children.Length-1].GetComponent<Rigidbody2D>();
+            hinge.connectedBody = ropePool.segements[ropePool.segements.Length-1].GetComponent<Rigidbody2D>();
         }
         else if(context.canceled){
             anchor.gameObject.SetActive(false);
-            rope.gameObject.SetActive(false);
+            ropePool.gameObject.SetActive(false);
         }
     }
 }
