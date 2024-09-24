@@ -10,7 +10,7 @@ public class Player : MonoBehaviour
     public int speed;
     public int jumpPower;
     public Anchor anchor;
-    public RopeSegements ropePool;
+    public SegementRope ropePool;
 
     float dir;
     Rigidbody2D rigid;
@@ -21,7 +21,7 @@ public class Player : MonoBehaviour
     Camera cam;
 
     public bool isJump;
-    public Rope rope;
+    public RopeController rope;
     void Awake()
     {
         rigid = GetComponent<Rigidbody2D>();
@@ -65,14 +65,15 @@ public class Player : MonoBehaviour
         if(context.started){
             rope.Shoot(cam.ScreenToWorldPoint(Input.mousePosition) - transform.position);
             
-            ropePool.gameObject.SetActive(true);
-            ropePool.transform.position = transform.position;
+            // ropePool.gameObject.SetActive(true);
+            // ropePool.transform.position = transform.position;
 
-            hinge.connectedBody = ropePool.segements[ropePool.segements.Length-1].GetComponent<Rigidbody2D>();
+            // hinge.connectedBody = ropePool.segements[ropePool.segements.Length-1].GetComponent<Rigidbody2D>();
         }
         else if(context.canceled){
-            anchor.gameObject.SetActive(false);
-            ropePool.gameObject.SetActive(false);
+            // anchor.gameObject.SetActive(false);
+            // ropePool.gameObject.SetActive(false);
+            rope.Cancel();
         }
     }
 }

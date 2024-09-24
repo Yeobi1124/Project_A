@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RopeSegements : MonoBehaviour
+public class SegementRope : MonoBehaviour
 {
     public Transform[] segements;
     private void Awake() {
@@ -15,4 +15,10 @@ public class RopeSegements : MonoBehaviour
                 child.gameObject.SetActive(value);
         }
     }
+
+
+    public void Set(object parm){}
+    public void Draw(){}
+    public void Active(){}
+    public void InActive(){}
 }

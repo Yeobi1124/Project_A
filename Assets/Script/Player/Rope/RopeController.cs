@@ -1,0 +1,36 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class RopeController : MonoBehaviour
+{
+    //public IRope rope;
+    public SpringRope rope;
+    public Anchor anchor;
+    public int maxLength;
+
+    private void Update() {
+        if(anchor.currentState == Anchor.State.Success){
+            rope.Spring();
+            anchor.Fix();
+        }
+    }
+
+    private void FixedUpdate() {
+        rope.Draw();
+    }
+
+    public void Shoot(Vector2 dir){
+        anchor.gameObject.SetActive(true);
+        anchor.transform.position = transform.position;
+        anchor.Act(dir);
+
+        rope.gameObject.SetActive(true);
+    }
+    
+    public void Cancel(){
+        anchor.gameObject.SetActive(false);
+        
+        rope.InActive();
+    }
+}
