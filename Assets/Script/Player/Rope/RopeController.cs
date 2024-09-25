@@ -9,15 +9,21 @@ public class RopeController : MonoBehaviour
     public Anchor anchor;
     public int maxLength;
 
+    [Header("Test")]
+    public VerletIntergration verlet;
+
     private void Update() {
         if(anchor.currentState == Anchor.State.Success){
             rope.Spring();
             anchor.Fix();
+
+            verlet.gameObject.SetActive(true);
+            verlet.segmentLength = (anchor.transform.position - transform.position).magnitude / verlet.segementCount;
         }
     }
 
     private void FixedUpdate() {
-        rope.Draw();
+        //rope.Draw();
     }
 
     public void Shoot(Vector2 dir){
@@ -32,5 +38,8 @@ public class RopeController : MonoBehaviour
         anchor.gameObject.SetActive(false);
         
         rope.InActive();
+
+        //test
+        verlet.gameObject.SetActive(false);
     }
 }
