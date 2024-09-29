@@ -38,6 +38,14 @@ public class VerletIntergration : MonoBehaviour
         }
     }
 
+    private void OnEnable() {
+        for(int i=0;i<segementCount;i++){
+            segements[i].currPos = transform.position;
+            segements[i].prevPos = transform.position;
+            segements[i].velocity = Vector2.zero;
+        }
+    }
+
     private void FixedUpdate() {
         UpdateSegements();
         for(int i=0;i<constraitLoop;i++)
