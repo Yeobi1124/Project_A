@@ -22,10 +22,6 @@ public class RopeController : MonoBehaviour
         }
     }
 
-    private void FixedUpdate() {
-        //rope.Draw();
-    }
-
     public void Shoot(Vector2 dir){
         anchor.gameObject.SetActive(true);
         anchor.transform.position = transform.position;
