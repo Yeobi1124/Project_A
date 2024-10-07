@@ -21,7 +21,8 @@ public class PlayerRopeMovement : MonoBehaviour, IPlayerMovement
     // }
 
     public void MoveHorizon(float value){
-        rigid.AddForce(transform.right * value * power, ForceMode2D.Force);
+        Debug.Log("Rope Movement Act");
+        rigid.AddForce(rigid.gameObject.transform.right * value * power, ForceMode2D.Force);
     }
 
     public void Jump(){
