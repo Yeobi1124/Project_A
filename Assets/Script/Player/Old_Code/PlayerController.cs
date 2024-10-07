@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
 {
     public PlayerMovement playerMovement;
     public PlayerRopeMovement playerRopeMovement;
-    PlayerState playerState;
+    PlayerStateOld playerState;
     public RopeController ropeController;
     Camera cam;
 
@@ -53,18 +53,18 @@ public class PlayerController : MonoBehaviour
     }
 
     public void OnJump(InputAction.CallbackContext context){
-        if(context.started && playerState.state.HasFlag(PlayerState.State.OnGround)){
+        if(context.started && playerState.state.HasFlag(PlayerStateOld.State.OnGround)){
             playerMovement.Jump();
         }
     }
 
     public void OnMouse(InputAction.CallbackContext context){
         if(context.started){
-            playerState.state |= PlayerState.State.Grappling;
+            playerState.state |= PlayerStateOld.State.Grappling;
             ropeController.Shoot(cam.ScreenToWorldPoint(Input.mousePosition) - transform.position);
         }
         else if(context.canceled){
-            playerState.state &= ~PlayerState.State.Grappling;
+            playerState.state &= ~PlayerStateOld.State.Grappling;
             ropeController.Cancel();
         }
     }
