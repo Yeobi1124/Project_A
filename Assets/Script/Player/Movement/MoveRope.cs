@@ -12,8 +12,15 @@ public class MoveRope : MonoBehaviour
         TryGetComponent(out rigid);
     }
 
-    public void UpdateAct(){
-        rigid.AddForce(transform.right * dir * power,ForceMode2D.Force);
+    public void UpdateAct(Vector3 anchorPos){
+        Vector3 forceDir = Quaternion.Euler(0, 0, -90) * (anchorPos - transform.position).normalized * dir * power;
+        rigid.AddForce(forceDir,ForceMode2D.Force);
+
+        Debug.DrawRay(transform.position, forceDir, Color.red);
+        Debug.DrawRay(transform.position, anchorPos - transform.position, Color.green);
+        
+        Debug.Log(anchorPos);
+        Debug.Log(transform.position);
     }
 
     public void Set(float value){

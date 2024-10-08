@@ -16,6 +16,8 @@ public class Player : MonoBehaviour
     private Camera cam;
     private Rigidbody2D rigid;
 
+    private bool yVecRemove; //Anchor 꽂을 때 튀어오르는 거 방지용
+
     private void Awake() {
         TryGetComponent(out attribute);
         TryGetComponent(out state);
@@ -34,22 +36,25 @@ public class Player : MonoBehaviour
             rigid.freezeRotation = true;
             transform.rotation = Quaternion.identity;
             moveHorizion.UpdateAct();
+
+            yVecRemove = true;
         }
         else{
             rigid.freezeRotation = false;
-            moveRope.UpdateAct();
+            if(yVecRemove){
+                rigid.velocity = new Vector2(rigid.velocity.x, 0);
+                yVecRemove = false;
+            }
+            if(state.isTight)
+                moveRope.UpdateAct(ropeController.anchor.gameObject.transform.position);
         }
     }
 
     public void OnMove(InputAction.CallbackContext context){
         float value = context.ReadValue<float>();
 
-        if(!state.onAnchor){
-            moveHorizion.Set(value);
-        }
-        else{
-            moveRope.Set(value);
-        }
+        moveHorizion.Set(value);
+        moveRope.Set(value);
     }
 
     public void OnJump(InputAction.CallbackContext context){
