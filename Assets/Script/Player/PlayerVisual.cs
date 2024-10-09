@@ -3,14 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerAnim : MonoBehaviour
+public class PlayerVisual : MonoBehaviour
 {
-    Animator anim;
+    // Animator anim;
     SpriteRenderer sprite;
     Rigidbody2D rigid;
 
     private void Awake() {
-        TryGetComponent(out anim);
+        // TryGetComponent(out anim);
         TryGetComponent(out sprite);
         TryGetComponent(out rigid);
     }
@@ -19,6 +19,6 @@ public class PlayerAnim : MonoBehaviour
             sprite.flipX = rigid.velocity.x < 0;
         }
 
-        anim.SetBool("isRun", Math.Abs(rigid.velocity.x) > 0.1);
+        // anim.SetBool("isRun", Math.Abs(rigid.velocity.x) > 0.1);
     }
 }
