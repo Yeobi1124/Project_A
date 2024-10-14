@@ -5,20 +5,29 @@ using UnityEngine;
 
 public class AI_Enemy01 : MonoBehaviour
 {
+    private EnemyState state;
+    private EnemyAttribute attribute;
+
     Rigidbody2D rigid;
 
     Selector rootNode;
     Transform target;
 
     //Temp
-    float attackRange = 1f;
-    float speed = 10f;
+    public float attackRange = 5f;
+    public float speed = 10f;
 
     private void Awake() {
+        TryGetComponent(out state);
+        TryGetComponent(out attribute);
         TryGetComponent(out rigid);
 
         rootNode = new Selector(
             new List<INode>(){
+                //Check Character is Dead
+                new Action(() => state.isDead ? INode.State.Success : INode.State.Failure),
+                //Check Character is Tied
+                new Action(() => state.isTied ? INode.State.Success : INode.State.Failure),
                 new Sequence( //Find Player 아 이건 뒤로 밀려야 할 듯. 우선순위 낮으니까
                     new List<INode>(){
                         new Action(DetectPlayer),
@@ -34,13 +43,8 @@ public class AI_Enemy01 : MonoBehaviour
     }
 
     INode.State DetectPlayer(){
-        Collider2D[] colli = Physics2D.OverlapBoxAll(transform.position, new Vector2(10, 1), 0, LayerMask.GetMask("Player"));
-        
-        //For Debug
-        Debug.DrawLine(transform.position + new Vector3(-5, -0.5f), transform.position + new Vector3(5, -0.5f));
-        Debug.DrawLine(transform.position + new Vector3(-5, 0.5f), transform.position + new Vector3(5, 0.5f));
-        Debug.DrawLine(transform.position + new Vector3(-5, -0.5f), transform.position + new Vector3(-5, 0.5f));
-        Debug.DrawLine(transform.position + new Vector3(5, -0.5f), transform.position + new Vector3(5, 0.5f));
+        Collider2D[] colli = Physics2D.OverlapBoxAll(transform.position, attribute.detectRange, 0, LayerMask.GetMask("Player"));
+        DebugTool.DrawRectangle(transform.position, attribute.detectRange, Color.green);
 
         if(colli != null && colli.Length != 0){
             target = colli[0].transform;
@@ -55,29 +59,14 @@ public class AI_Enemy01 : MonoBehaviour
     }
 
     INode.State MoveToPlayer(){
-        /*
-        if (_detectedPlayer != null)
-        {
-            if (Vector3.SqrMagnitude(_detectedPlayer.position - transform.position) < (_meleeAttackRange * _meleeAttackRange))
-            {
-                return INode.ENodeState.ENS_Success;
-            }
-
-            transform.position = Vector3.MoveTowards(transform.position, _detectedPlayer.position, Time.deltaTime * _movementSpeed);
-
-            return INode.ENodeState.ENS_Running;
-        }
-
-        return INode.ENodeState.ENS_Failure;
-        */
         if(target == null)
             return INode.State.Failure;
         
-        if(transform.position.magnitude < attackRange){
+        if((transform.position - target.position).magnitude < attackRange){
             return INode.State.Success;
         }
 
-        transform.position = Vector2.MoveTowards(transform.position, target.position, Time.deltaTime * speed);
+        transform.position = Vector2.MoveTowards(transform.position, target.position, Time.deltaTime * speed); //얘 공중까지 쫓아와서 바꿔야됨
 
         return INode.State.Success;
     }
