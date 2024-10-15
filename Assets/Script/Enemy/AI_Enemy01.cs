@@ -22,6 +22,19 @@ public class AI_Enemy01 : MonoBehaviour
         TryGetComponent(out attribute);
         TryGetComponent(out rigid);
 
+        InitAI();
+    }
+
+    private void Update() {
+        rootNode.Evaluate();
+    }
+
+    private void OnCollisionEnter2D(Collision2D other) {
+        
+    }
+
+    #region AI
+    void InitAI(){
         rootNode = new Selector(
             new List<INode>(){
                 //Check Character is Dead
@@ -36,10 +49,6 @@ public class AI_Enemy01 : MonoBehaviour
                 )
             }
         );
-    }
-
-    private void Update() {
-        rootNode.Evaluate();
     }
 
     INode.State DetectPlayer(){
@@ -70,4 +79,5 @@ public class AI_Enemy01 : MonoBehaviour
 
         return INode.State.Success;
     }
+    #endregion
 }

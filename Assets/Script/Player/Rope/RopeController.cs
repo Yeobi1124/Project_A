@@ -4,13 +4,10 @@ using UnityEngine;
 
 public class RopeController : MonoBehaviour
 {
-    //public IRope rope;
     public SpringRope rope;
     public Anchor anchor;
-    public int maxLength;
-
-    [Header("Test")]
     public VerletIntergration verlet;
+    public int maxLength;
 
     private void Update() {
         if(anchor.currentState == Anchor.State.Success){

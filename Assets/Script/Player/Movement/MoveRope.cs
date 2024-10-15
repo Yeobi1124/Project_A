@@ -4,12 +4,17 @@ using UnityEngine;
 
 public class MoveRope : MonoBehaviour
 {
-    public float power;
-    Rigidbody2D rigid;
+    int power;
     float dir;
+    Rigidbody2D rigid;
 
-    private void Awake() {
-        TryGetComponent(out rigid);
+    public void Init(Rigidbody2D rigid, int power) {
+        this.rigid = rigid;
+        this.power = power;
+    }
+
+    public void Act(float value){
+        dir = value;
     }
 
     public void UpdateAct(Vector3 anchorPos){
@@ -18,12 +23,5 @@ public class MoveRope : MonoBehaviour
 
         Debug.DrawRay(transform.position, forceDir, Color.red);
         Debug.DrawRay(transform.position, anchorPos - transform.position, Color.green);
-        
-        Debug.Log(anchorPos);
-        Debug.Log(transform.position);
-    }
-
-    public void Set(float value){
-        dir = value;
     }
 }

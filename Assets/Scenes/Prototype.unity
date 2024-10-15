@@ -2053,6 +2053,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 636824540}
+  - component: {fileID: 636824541}
   m_Layer: 0
   m_Name: RopeController
   m_TagString: Untagged
@@ -2078,6 +2079,22 @@ Transform:
   - {fileID: 1083706889}
   m_Father: {fileID: 1422235630}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &636824541
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 636824539}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c8c3ac0261be9b44bc54b3a3a54391c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rope: {fileID: 1240134274}
+  anchor: {fileID: 1016015419}
+  verlet: {fileID: 1083706890}
+  maxLength: 0
 --- !u!1 &802472192
 GameObject:
   m_ObjectHideFlags: 0
@@ -5670,7 +5687,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1422235645}
         m_TargetAssemblyTypeName: Player, Assembly-CSharp
-        m_MethodName: OnMouse
+        m_MethodName: OnShoot
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5682,6 +5699,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: f98c1cd5-8c20-4752-91b4-62c7e74422fa
     m_ActionName: PlayerActions/Mouse[/Mouse/leftButton]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1422235645}
+        m_TargetAssemblyTypeName: Player, Assembly-CSharp
+        m_MethodName: OnThrow
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 37fa2a14-caee-4941-b1f3-5ec11052c007
+    m_ActionName: PlayerActions/MouseRight[/Mouse/rightButton]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: PC
   m_DefaultActionMap: PlayerActions
@@ -5783,8 +5816,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rope: {fileID: 1240134274}
   anchor: {fileID: 1016015419}
-  maxLength: 0
   verlet: {fileID: 1083706890}
+  maxLength: 0
 --- !u!114 &1422235643
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5828,6 +5861,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40d87d155f6a2e1469b37cdafc3cdd30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ropeController: {fileID: 0}
 --- !u!114 &1422235646
 MonoBehaviour:
   m_ObjectHideFlags: 0

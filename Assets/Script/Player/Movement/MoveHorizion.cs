@@ -4,13 +4,18 @@ using UnityEngine;
 
 public class MoveHorizion : MonoBehaviour
 {
-    public float speed;
-    Rigidbody2D rigid;
+    int speed;
     float dir; // dir < 0 Left, dir > 0 Right
-    Vector2 nextVelocity;
+    Rigidbody2D rigid;
+    Vector2 tempVelocity;
 
-    private void Awake() {
-        TryGetComponent(out rigid);
+    public void Init(Rigidbody2D rigid, int speed) {
+        this.rigid = rigid;
+        this.speed = speed;
+    }
+
+    public void Act(float value){
+        dir = value;
     }
 
     public void UpdateAct(){
@@ -19,13 +24,9 @@ public class MoveHorizion : MonoBehaviour
             return;
         }
 
-        nextVelocity.y = rigid.velocity.y;
-        nextVelocity.x = dir * speed;
+        tempVelocity.y = rigid.velocity.y;
+        tempVelocity.x = dir * speed;
 
-        rigid.velocity = nextVelocity;
-    }
-
-    public void Set(float value){
-        dir = value;
+        rigid.velocity = tempVelocity;
     }
 }

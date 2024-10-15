@@ -7,6 +7,7 @@ public class PlayerState : MonoBehaviour
     public bool onGround; // 땅 위에 있는지, Animator와 관련
     public bool onAnchor; //Anchor 박혔는지
     public bool isTight; //줄이 팽팽한지
+    public bool hasMuffler;
     
 
     //Animator
