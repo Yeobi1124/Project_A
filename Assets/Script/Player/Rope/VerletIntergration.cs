@@ -30,7 +30,12 @@ public class VerletIntergration : MonoBehaviour
     private void Awake() {
         lineRenderer = GetComponent<LineRenderer>();
         segements = new List<Segement>();
+    }
 
+    public void Init(Transform firstAnchor, Transform secondAnchor){
+        this.firstAnchor = firstAnchor;
+        this.secondAnchor = secondAnchor;
+        
         Vector2 segementPos = firstAnchor.position;
         for(int i=0 ;i<segementCount;i++){
             segements.Add(new Segement(segementPos));
@@ -38,7 +43,7 @@ public class VerletIntergration : MonoBehaviour
         }
     }
 
-    private void OnEnable() {
+    public void Active() {
         for(int i=0;i<segementCount;i++){
             segements[i].currPos = transform.position;
             segements[i].prevPos = transform.position;

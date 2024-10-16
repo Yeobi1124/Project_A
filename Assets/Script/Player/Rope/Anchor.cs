@@ -14,6 +14,8 @@ public class Anchor : MonoBehaviour
         rigid = GetComponent<Rigidbody2D>();
 
         currentState = State.Idle;
+
+        Debug.Log("Anchor");
     }
 
     private void OnEnable() {
@@ -32,8 +34,8 @@ public class Anchor : MonoBehaviour
         rigid.bodyType = RigidbodyType2D.Static;
     }
 
-    public void Act(Vector2 dir){
-        this.dir = dir;
+    public void Act(Vector2 target){
+        this.dir = target - (Vector2)transform.position;
         rigid.bodyType = RigidbodyType2D.Dynamic;
 
         currentState = State.Running;

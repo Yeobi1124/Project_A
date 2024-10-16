@@ -58,7 +58,6 @@ public class AI_Enemy01 : MonoBehaviour
         if(colli != null && colli.Length != 0){
             target = colli[0].transform;
 
-            Debug.Log("Detect Success");
             return INode.State.Success;
         }
 

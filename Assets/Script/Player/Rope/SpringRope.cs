@@ -5,7 +5,7 @@ using UnityEngine;
 public class SpringRope : MonoBehaviour
 {
     public SpringJoint2D springJoint2D;
-    public Transform anchor;
+    private Transform anchor;
     public LineRenderer lineRenderer;
     public float distance;
 
@@ -13,11 +13,13 @@ public class SpringRope : MonoBehaviour
         springJoint2D.enabled = distance <= Vector3.Distance(transform.position, anchor.position);
     }
 
-    private void OnDisable() {
+    public void Init(Transform anchor){
+        this.anchor = anchor;
     }
 
     public void InActive(){
         springJoint2D.enabled = false;
+        springJoint2D.connectedBody = null;
         gameObject.SetActive(false);
     }
     public void Draw(){

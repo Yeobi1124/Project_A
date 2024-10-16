@@ -75,7 +75,7 @@ public class Player : MonoBehaviour
 
     public void OnShoot(InputAction.CallbackContext context){ //목도리 발사
         if(context.started){
-            ropeController.Shoot(cam.ScreenToWorldPoint(Input.mousePosition) - transform.position);
+            ropeController.Shoot(cam.ScreenToWorldPoint(Input.mousePosition));
         }
         else if(context.canceled){
             ropeController.Cancel();
@@ -85,7 +85,7 @@ public class Player : MonoBehaviour
     public void OnThrow(InputAction.CallbackContext context) //목도리 던지는거
     {
         if(context.started){
-
+            ropeController.Throw(cam.ScreenToWorldPoint(Input.mousePosition));
         }
     }
 }
