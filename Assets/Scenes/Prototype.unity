@@ -5788,7 +5788,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 092da4e40bbcb6440846db4404f607e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
 --- !u!114 &1422235641
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5801,7 +5800,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e64ebf0b4f8496344ab0e63662ce6859, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  jumpPower: 15
 --- !u!114 &1422235642
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5833,6 +5831,7 @@ MonoBehaviour:
   onGround: 0
   onAnchor: 0
   isTight: 0
+  hasMuffler: 0
   anchor: {fileID: 1016015419}
   springRope: {fileID: 1240134274}
 --- !u!114 &1422235644
@@ -5849,6 +5848,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 0
   health: 0
+  moveHorizionSpeed: 5
+  jumpPower: 15
+  ropeMovePower: 10
 --- !u!114 &1422235645
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5874,7 +5876,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7b067f6011b0a541bacadfbcb4abfe5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  power: 10
 --- !u!114 &1422235647
 MonoBehaviour:
   m_ObjectHideFlags: 0
