@@ -27,7 +27,7 @@ public class Player : MonoBehaviour
         TryGetComponent(out attribute);
         TryGetComponent(out state);
 
-        TryGetComponent(out ropeController);
+        //TryGetComponent(out ropeController);
         TryGetComponent(out moveHorizion);
         TryGetComponent(out moveRope);
         TryGetComponent(out jump);

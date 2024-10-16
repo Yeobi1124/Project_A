@@ -4,7 +4,11 @@ using UnityEngine;
 
 public class VerletIntergration : MonoBehaviour
 {
-    LineRenderer lineRenderer;
+    private LineRenderer _lineRenderer;
+    private LineRenderer lineRenderer{get{
+        if(!_lineRenderer) TryGetComponent(out _lineRenderer);
+        return _lineRenderer;
+    }}
     public int segementCount;
     public int constraitLoop;
     public float lineWidth;
@@ -13,14 +17,21 @@ public class VerletIntergration : MonoBehaviour
     public Transform secondAnchor;
     public Vector2 gravity = new Vector2(0, 9.81f);
 
-    private List<Segement> segements;
+    private List<Segment> _segements;
+    private List<Segment> segements{
+        get{
+            if(_segements == null) _segements = new List<Segment>();
+            return _segements;
+        } set{
+            _segements = value;
+        }}
 
-    public class Segement{
+    public class Segment{
         public Vector2 prevPos;
         public Vector2 currPos;
         public Vector2 velocity;
 
-        public Segement(Vector2 _pos){
+        public Segment(Vector2 _pos){
             currPos = _pos;
             prevPos = _pos;
             velocity = Vector2.zero;
@@ -28,8 +39,8 @@ public class VerletIntergration : MonoBehaviour
     }
 
     private void Awake() {
-        lineRenderer = GetComponent<LineRenderer>();
-        segements = new List<Segement>();
+        //lineRenderer = GetComponent<LineRenderer>();
+        //segements = new List<Segment>();
     }
 
     public void Init(Transform firstAnchor, Transform secondAnchor){
@@ -38,7 +49,7 @@ public class VerletIntergration : MonoBehaviour
         
         Vector2 segementPos = firstAnchor.position;
         for(int i=0 ;i<segementCount;i++){
-            segements.Add(new Segement(segementPos));
+            segements.Add(new Segment(segementPos));
             segementPos.y -= segmentLength;
         }
     }
