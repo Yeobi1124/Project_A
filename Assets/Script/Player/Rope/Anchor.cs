@@ -14,8 +14,6 @@ public class Anchor : MonoBehaviour
         rigid = GetComponent<Rigidbody2D>();
 
         currentState = State.Idle;
-
-        Debug.Log("Anchor");
     }
 
     private void OnEnable() {

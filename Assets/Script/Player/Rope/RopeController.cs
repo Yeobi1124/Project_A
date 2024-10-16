@@ -10,7 +10,7 @@ public class RopeController : MonoBehaviour
     public VerletIntergration verlet;
     public int maxLength;
 
-    private void Awake() {
+    private void Start() {
         rope.Init(anchor.transform);
         verlet.Init(anchor.transform, ownAnchor.transform);
     }
