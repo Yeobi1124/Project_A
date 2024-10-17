@@ -4,10 +4,13 @@ using UnityEngine;
 
 public class PlayerState : MonoBehaviour
 {
+    [Header("Basic States")]
     public bool onGround; // 땅 위에 있는지, Animator와 관련
     public bool onAnchor; //Anchor 박혔는지
-    public bool isTight; //줄이 팽팽한지
+
+    [Header("Rope States")]
     public bool hasMuffler;
+    public bool isTight; //줄이 팽팽한지
     
 
     //Animator
@@ -25,6 +28,8 @@ public class PlayerState : MonoBehaviour
     private void Awake() {
         TryGetComponent(out anim);
         TryGetComponent(out rigid);
+
+        hasMuffler = true;
     }
 
     private void Update() {

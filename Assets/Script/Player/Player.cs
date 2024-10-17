@@ -42,7 +42,7 @@ public class Player : MonoBehaviour
     }
 
     private void FixedUpdate() {
-        if(!state.onAnchor){
+        if(!state.onAnchor || !state.hasMuffler){
             rigid.freezeRotation = true;
             transform.rotation = Quaternion.identity;
             moveHorizion.UpdateAct();
@@ -86,6 +86,7 @@ public class Player : MonoBehaviour
     {
         if(context.started){
             ropeController.ToggleThrow(cam.ScreenToWorldPoint(Input.mousePosition));
+            state.hasMuffler = !state.hasMuffler;
         }
     }
 }
