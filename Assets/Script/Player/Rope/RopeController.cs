@@ -4,50 +4,59 @@ using UnityEngine;
 
 public class RopeController : MonoBehaviour
 {
-    public SpringRope rope;
+    // 소유자 지정 방법 생각
+    public RopePhysics physics;
     public Anchor anchor;
     public Anchor ownAnchor; //Throw에 쓸 앵커
-    public VerletIntergration verlet;
+    public RopeVisual visual;
     public int maxLength;
 
     private void Start() {
-        rope.Init(anchor.transform);
-        verlet.Init(anchor.transform, ownAnchor.transform);
+        physics.Init(anchor.transform);
+        visual.Init(anchor.transform, ownAnchor.transform);
     }
 
     private void Update() {
-        if(anchor.currentState == Anchor.State.Success){
-            rope.Spring();
+        if(anchor.state == Anchor.State.Catch){
             anchor.Fix();
+            
+            physics.Active();
 
-            verlet.gameObject.SetActive(true);
-            verlet.Active();
-            verlet.segmentLength = (anchor.transform.position - transform.position).magnitude / verlet.segementCount;
+            visual.Active();
+            visual.segmentLength = (anchor.transform.position - transform.position).magnitude / visual.segementCount;
+        }
+
+        if(ownAnchor.state == Anchor.State.Catch){
+            ownAnchor.Fix();
         }
     }
 
     public void Shoot(Vector2 target){
         anchor.gameObject.SetActive(true);
-        anchor.transform.position = transform.position;
-        anchor.Act(target);
-
-        rope.gameObject.SetActive(true);
+        anchor.transform.position = ownAnchor.transform.position;
+        anchor.MoveTo(target);
     }
-
+    public void ShootCancel(){
+        anchor.gameObject.SetActive(false);
+        
+        physics.InActive();
+        visual.InActive();
+    }
+    public void ToggleThrow(Vector2 target){
+        if(ownAnchor.state == Anchor.State.Fixed){
+            ThrowCancel();
+        }
+        else{
+            Throw(target);
+        }
+    }
     public void Throw(Vector2 target){
         ownAnchor.gameObject.SetActive(true);
         ownAnchor.transform.position = transform.position;
-        ownAnchor.Act(target);
-
-        rope.gameObject.SetActive(true);
+        ownAnchor.MoveTo(target);
     }
-    
-    public void Cancel(){
-        anchor.gameObject.SetActive(false);
-        
-        rope.InActive();
-
-        //test
-        verlet.gameObject.SetActive(false);
+    public void ThrowCancel(){
+        ownAnchor.gameObject.SetActive(false);
+        ownAnchor.transform.position = transform.position;
     }
 }

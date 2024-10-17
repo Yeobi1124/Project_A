@@ -35,7 +35,7 @@ public class PlayerController : MonoBehaviour
         //for test
         Rigidbody2D rigid = GetComponent<Rigidbody2D>();
 
-        if(ropeController.anchor.currentState != Anchor.State.Fix){
+        if(ropeController.anchor.state != Anchor.State.Fixed){
             //for test
             transform.rotation = Quaternion.identity;
             rigid.freezeRotation = true;
@@ -65,7 +65,7 @@ public class PlayerController : MonoBehaviour
         }
         else if(context.canceled){
             playerState.state &= ~PlayerStateOld.State.Grappling;
-            ropeController.Cancel();
+            ropeController.ShootCancel();
         }
     }
 }

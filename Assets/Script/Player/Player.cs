@@ -78,14 +78,14 @@ public class Player : MonoBehaviour
             ropeController.Shoot(cam.ScreenToWorldPoint(Input.mousePosition));
         }
         else if(context.canceled){
-            ropeController.Cancel();
+            ropeController.ShootCancel();
         }
     }
 
     public void OnThrow(InputAction.CallbackContext context) //목도리 던지는거
     {
         if(context.started){
-            ropeController.Throw(cam.ScreenToWorldPoint(Input.mousePosition));
+            ropeController.ToggleThrow(cam.ScreenToWorldPoint(Input.mousePosition));
         }
     }
 }

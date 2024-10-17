@@ -2,13 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class VerletIntergration : MonoBehaviour
+// use Verlet Integration
+public class RopeVisual : MonoBehaviour
 {
-    private LineRenderer _lineRenderer;
-    private LineRenderer lineRenderer{get{
-        if(!_lineRenderer) TryGetComponent(out _lineRenderer);
-        return _lineRenderer;
-    }}
+    public bool active = false;
     public int segementCount;
     public int constraitLoop;
     public float lineWidth;
@@ -17,16 +14,22 @@ public class VerletIntergration : MonoBehaviour
     public Transform secondAnchor;
     public Vector2 gravity = new Vector2(0, 9.81f);
 
+    private LineRenderer _lineRenderer;
+    private LineRenderer lineRenderer{get{
+        if(!_lineRenderer){
+            if(!TryGetComponent(out _lineRenderer))
+                Debug.LogWarning("LineRenderer is missing");
+        }
+        return _lineRenderer;
+    }}
     private List<Segment> _segements;
     private List<Segment> segements{
         get{
             if(_segements == null) _segements = new List<Segment>();
             return _segements;
-        } set{
-            _segements = value;
-        }}
+        } set{ _segements = value;}}
 
-    public class Segment{
+    private class Segment{
         public Vector2 prevPos;
         public Vector2 currPos;
         public Vector2 velocity;
@@ -36,11 +39,6 @@ public class VerletIntergration : MonoBehaviour
             prevPos = _pos;
             velocity = Vector2.zero;
         }
-    }
-
-    private void Awake() {
-        //lineRenderer = GetComponent<LineRenderer>();
-        //segements = new List<Segment>();
     }
 
     public void Init(Transform firstAnchor, Transform secondAnchor){
@@ -55,6 +53,7 @@ public class VerletIntergration : MonoBehaviour
     }
 
     public void Active() {
+        active = true;
         for(int i=0;i<segementCount;i++){
             segements[i].currPos = transform.position;
             segements[i].prevPos = transform.position;
@@ -62,11 +61,17 @@ public class VerletIntergration : MonoBehaviour
         }
     }
 
+    public void InActive(){
+        active = false;
+    }
+
     private void FixedUpdate() {
         UpdateSegements();
         for(int i=0;i<constraitLoop;i++)
             ApplyConstraint();
-        DrawRope();
+
+        if(active) DrawRope();
+        else EraseRope();
     }
 
     private void UpdateSegements(){
@@ -98,7 +103,9 @@ public class VerletIntergration : MonoBehaviour
             }
         }
     }
-
+    private void EraseRope(){
+        lineRenderer.positionCount = 0;
+    }
     private void DrawRope(){
         lineRenderer.startWidth = lineWidth;
         lineRenderer.endWidth = lineWidth;

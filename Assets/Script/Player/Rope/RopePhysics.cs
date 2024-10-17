@@ -2,15 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpringRope : MonoBehaviour
+// use SpringJoint2D
+public class RopePhysics : MonoBehaviour
 {
     public SpringJoint2D springJoint2D;
     private Transform anchor;
-    public LineRenderer lineRenderer;
     public float distance;
+    public bool active = false;
 
     private void FixedUpdate() {
-        springJoint2D.enabled = distance <= Vector3.Distance(transform.position, anchor.position);
+        if(active){
+            springJoint2D.enabled = distance <= Vector3.Distance(transform.position, anchor.position);
+            Debug.Log(Vector3.Distance(transform.position, anchor.position));
+        }
     }
 
     public void Init(Transform anchor){
@@ -18,20 +22,15 @@ public class SpringRope : MonoBehaviour
     }
 
     public void InActive(){
+        active = false;
+
         springJoint2D.enabled = false;
         springJoint2D.connectedBody = null;
-        gameObject.SetActive(false);
-    }
-    public void Draw(){
-        lineRenderer.startWidth = 0.1f;
-        lineRenderer.endWidth = 0.1f;
-
-        lineRenderer.positionCount = 2;
-        lineRenderer.SetPosition(0, transform.position);
-        lineRenderer.SetPosition(1, anchor.position);
     }
 
-    public void Spring(){
+    public void Active(){
+        active = true;
+
         springJoint2D.enabled = true;
         springJoint2D.autoConfigureConnectedAnchor = false;
         springJoint2D.connectedBody = anchor.gameObject.GetComponent<Rigidbody2D>();

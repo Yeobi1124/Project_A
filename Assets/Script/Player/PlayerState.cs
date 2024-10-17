@@ -20,7 +20,7 @@ public class PlayerState : MonoBehaviour
     float raycastLength = 1f;
 
     public Anchor anchor;
-    public SpringRope springRope;
+    public RopePhysics springRope;
 
     private void Awake() {
         TryGetComponent(out anim);
@@ -32,7 +32,7 @@ public class PlayerState : MonoBehaviour
         Debug.DrawRay(transform.position, Vector2.down * raycastLength);
         onGround = hit.collider;
 
-        onAnchor = anchor.gameObject.activeSelf && anchor.currentState == Anchor.State.Fix;
+        onAnchor = anchor.gameObject.activeSelf && anchor.state == Anchor.State.Fixed;
 
         isTight = springRope.springJoint2D.enabled;
 

@@ -4,43 +4,46 @@ using UnityEngine;
 
 public class Anchor : MonoBehaviour
 {
-    public enum State {Idle, Running, Success, Failure, Fix};
-    public State currentState;
+    public enum State {None, Flying, Catch, Fixed}
+    public State state;
     public int speed;
-    Rigidbody2D rigid;
+    public LayerMask collisionLayerMask;
+    Rigidbody2D _rigid;
+    Rigidbody2D rigid{
+        get{
+            if(!_rigid){
+                if(!TryGetComponent(out _rigid))
+                    Debug.LogWarning("Rigidbody2D is missing");
+            }
+            return _rigid;
+        }
+        set {_rigid = value;}
+    }
     Vector2 dir;
-
-    private void Awake() {
-        rigid = GetComponent<Rigidbody2D>();
-
-        currentState = State.Idle;
-    }
-
-    private void OnEnable() {
-        currentState = State.Idle;
-    }
-
+    // Transform owner; 나중에 플레이어에게 돌아오는 기능 넣으려고 하면 추가
+    private void OnEnable() { state = State.None; }
+    private void OnDisable() { state = State.None; }
+    private void FixedUpdate() { if(state == State.Flying) rigid.velocity = dir * speed; }
     private void OnTriggerEnter2D(Collider2D other) {
-        if(other.gameObject.layer == LayerMask.NameToLayer("Platform")){
-            currentState = State.Success;
+        if((collisionLayerMask.value & (1 << other.gameObject.layer)) != 0){ //LayerMask.value가 Flag같은 애라 비트연산자 사용
+            state = State.Catch;
         }
     }
 
-    public void Fix(){
-        currentState = State.Fix;
-
-        rigid.bodyType = RigidbodyType2D.Static;
-    }
-
-    public void Act(Vector2 target){
-        this.dir = target - (Vector2)transform.position;
+    public void MoveTo(Vector2 target){
+        state = State.Flying;
         rigid.bodyType = RigidbodyType2D.Dynamic;
-
-        currentState = State.Running;
+        dir = (target - (Vector2)transform.position).normalized;
     }
 
-    private void FixedUpdate() {
-        if(rigid.bodyType != RigidbodyType2D.Static)
-            rigid.velocity = dir * speed;
+    public void Cancel(){
+        state = State.None;
+        rigid.bodyType = RigidbodyType2D.Dynamic;
+        dir = Vector2.zero;
+    }
+    
+    public void Fix(){
+        state = State.Fixed;
+        rigid.bodyType = RigidbodyType2D.Static;
     }
 }
