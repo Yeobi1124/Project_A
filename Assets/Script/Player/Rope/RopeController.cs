@@ -11,6 +11,8 @@ public class RopeController : MonoBehaviour
     public RopeVisual visual;
     public float range;
 
+    public bool isPlayerOwn;
+
     private void Start() {
         physics.Init(anchor.transform);
         visual.Init(anchor.transform, ownAnchor.transform);
@@ -33,7 +35,7 @@ public class RopeController : MonoBehaviour
                 physics.Active();
 
                 visual.Active();
-                visual.segmentLength = (anchor.transform.position - transform.position).magnitude / visual.segementCount;
+                visual.segmentLength = (anchor.transform.position - ownAnchor.transform.position).magnitude / visual.segementCount;
                 break;
             case Anchor.State.Fixed:
                 break;
@@ -45,6 +47,9 @@ public class RopeController : MonoBehaviour
     }
 
     public void Shoot(Vector2 target){
+        if(!isPlayerOwn) anchor.collisionLayerMask = LayerMask.GetMask("Player", "Enemy");
+        else anchor.collisionLayerMask = LayerMask.GetMask("Platform");
+
         anchor.gameObject.SetActive(true);
         anchor.transform.position = ownAnchor.transform.position;
         anchor.MoveTo(target);
@@ -58,9 +63,15 @@ public class RopeController : MonoBehaviour
     public void ToggleThrow(Vector2 target){
         if(ownAnchor.state == Anchor.State.Fixed){
             ThrowCancel();
+
+            //Test
+            isPlayerOwn = true;
         }
         else{
             Throw(target);
+
+            //Test
+            isPlayerOwn = false;
         }
     }
     private void Throw(Vector2 target){

@@ -138,7 +138,7 @@ GameObject:
   - component: {fileID: 79745088}
   - component: {fileID: 79745089}
   - component: {fileID: 79745090}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Enemy0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -612,6 +612,7 @@ MonoBehaviour:
   ownAnchor: {fileID: 2015637246}
   visual: {fileID: 636824543}
   range: 7.5
+  isPlayerOwn: 0
 --- !u!114 &636824542
 MonoBehaviour:
   m_ObjectHideFlags: 0
