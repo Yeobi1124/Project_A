@@ -9,11 +9,11 @@ public class RopePhysics : MonoBehaviour
     public Rigidbody2D anchor;
     public float distance;
     public bool active = false;
+    public bool isTight;
 
     private void FixedUpdate() {
         if(active){
             springJoint2D.enabled = distance <= Vector3.Distance(transform.position, anchor.position);
-            //Debug.Log(Vector3.Distance(transform.position, anchor.position));
         }
     }
 

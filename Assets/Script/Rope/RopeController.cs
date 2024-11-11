@@ -1,17 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class RopeController : MonoBehaviour
 {
+    public Mediator mediator;
+
+    [Header("Owner")]
     // 소유자 지정 방법 생각
     public Rigidbody2D owner; // Character가 가지고 있으면 Character의 Rigidbody. Platform에 박혀있으면 null로
     public Rigidbody2D defaultOwner;
 
+    [Header("Property")]
     public RopePhysics physics;
     public RopeVisual visual;
     public Anchor anchor;
     public Anchor rootAnchor; //Throw에 쓸 앵커
+
+    [Header("Attribute")]
     public float range;
 
     private void Update() {
@@ -37,13 +44,21 @@ public class RopeController : MonoBehaviour
                 break;
         }
 
-        if(rootAnchor.state == Anchor.State.Catch){
-            rootAnchor.Fix();
+        switch(rootAnchor.state){
+            case Anchor.State.None:
+            case Anchor.State.Flying:
+            case Anchor.State.Fixed:
+                break;
+            case Anchor.State.Catch:
+                rootAnchor.Fix();
+                break;
+            default:
+                break;
         }
     }
 
     public void Shoot(Vector2 target){
-        if(owner != null) anchor.collisionLayerMask = LayerMask.GetMask("Character");
+        if(owner == null) anchor.collisionLayerMask = LayerMask.GetMask("Character");
         else anchor.collisionLayerMask = LayerMask.GetMask("Platform");
 
         anchor.gameObject.SetActive(true);
@@ -61,11 +76,13 @@ public class RopeController : MonoBehaviour
             ThrowCancel();
 
             owner = defaultOwner;
+            mediator?.Notify(this, "isThrown", true);
         }
         else{
             Throw(target);
 
             owner = null;
+            mediator?.Notify(this, "isThrown", false);
         }
     }
     private void Throw(Vector2 target){
@@ -76,5 +93,22 @@ public class RopeController : MonoBehaviour
     private void ThrowCancel(){
         rootAnchor.gameObject.SetActive(false);
         rootAnchor.transform.position = transform.position;
+    }
+
+    
+    public void OnShoot(InputAction.CallbackContext context){ //목도리 발사
+        if(context.started){
+            Shoot(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+        }
+        else if(context.canceled){
+            ShootCancel();
+        }
+    }
+
+    public void OnThrow(InputAction.CallbackContext context) //목도리 던지는거
+    {
+        if(context.started){
+            ToggleThrow(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+        }
     }
 }
