@@ -20,7 +20,6 @@ public class Anchor : MonoBehaviour
         set {_rigid = value;}
     }
     Vector2 dir;
-    // Transform owner; 나중에 플레이어에게 돌아오는 기능 넣으려고 하면 추가
     private void OnEnable() { state = State.None; }
     private void OnDisable() { state = State.None; }
     private void FixedUpdate() { if(state == State.Flying) rigid.velocity = dir * speed; }
@@ -44,6 +43,6 @@ public class Anchor : MonoBehaviour
     
     public void Fix(){
         state = State.Fixed;
-        rigid.bodyType = RigidbodyType2D.Static;
+        rigid.bodyType = RigidbodyType2D.Kinematic; // 움직이는 플랫폼 같은거 생각하면 Static 보단 Kinematic
     }
 }

@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
-    //Player Property
+    [Header("Player Property")]
     private PlayerAttribute attribute;
     private PlayerState state;
 

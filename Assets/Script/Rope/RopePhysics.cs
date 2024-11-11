@@ -6,7 +6,7 @@ using UnityEngine;
 public class RopePhysics : MonoBehaviour
 {
     public SpringJoint2D springJoint2D;
-    private Transform anchor;
+    public Rigidbody2D anchor;
     public float distance;
     public bool active = false;
 
@@ -15,10 +15,6 @@ public class RopePhysics : MonoBehaviour
             springJoint2D.enabled = distance <= Vector3.Distance(transform.position, anchor.position);
             //Debug.Log(Vector3.Distance(transform.position, anchor.position));
         }
-    }
-
-    public void Init(Transform anchor){
-        this.anchor = anchor;
     }
 
     public void InActive(){
@@ -33,7 +29,7 @@ public class RopePhysics : MonoBehaviour
 
         springJoint2D.enabled = true;
         springJoint2D.autoConfigureConnectedAnchor = false;
-        springJoint2D.connectedBody = anchor.gameObject.GetComponent<Rigidbody2D>();
+        springJoint2D.connectedBody = anchor;
 
         distance = Vector3.Distance(anchor.position, transform.position);
         springJoint2D.distance = distance;

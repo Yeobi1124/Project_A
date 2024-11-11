@@ -5,27 +5,23 @@ using UnityEngine;
 public class RopeController : MonoBehaviour
 {
     // 소유자 지정 방법 생각
+    public Rigidbody2D owner; // Character가 가지고 있으면 Character의 Rigidbody. Platform에 박혀있으면 null로
+    public Rigidbody2D defaultOwner;
+
     public RopePhysics physics;
-    public Anchor anchor;
-    public Anchor ownAnchor; //Throw에 쓸 앵커
     public RopeVisual visual;
+    public Anchor anchor;
+    public Anchor rootAnchor; //Throw에 쓸 앵커
     public float range;
 
-    public bool isPlayerOwn;
-
-    private void Start() {
-        physics.Init(anchor.transform);
-        visual.Init(anchor.transform, ownAnchor.transform);
-    }
-
     private void Update() {
-        DebugTool.DrawCircle(ownAnchor.transform.position, range); //범위 표시
+        DebugTool.DrawCircle(rootAnchor.transform.position, range); //범위 표시
 
         switch(anchor.state){
             case Anchor.State.None:
                 break;
             case Anchor.State.Flying:
-                if((anchor.transform.position - ownAnchor.transform.position).magnitude > range){
+                if((anchor.transform.position - rootAnchor.transform.position).magnitude > range){
                     ShootCancel();
                 }
                 break;
@@ -35,23 +31,23 @@ public class RopeController : MonoBehaviour
                 physics.Active();
 
                 visual.Active();
-                visual.segmentLength = (anchor.transform.position - ownAnchor.transform.position).magnitude / visual.segementCount;
+                visual.segmentLength = (anchor.transform.position - rootAnchor.transform.position).magnitude / visual.segementCount;
                 break;
             case Anchor.State.Fixed:
                 break;
         }
 
-        if(ownAnchor.state == Anchor.State.Catch){
-            ownAnchor.Fix();
+        if(rootAnchor.state == Anchor.State.Catch){
+            rootAnchor.Fix();
         }
     }
 
     public void Shoot(Vector2 target){
-        if(!isPlayerOwn) anchor.collisionLayerMask = LayerMask.GetMask("Player", "Enemy");
+        if(owner != null) anchor.collisionLayerMask = LayerMask.GetMask("Character");
         else anchor.collisionLayerMask = LayerMask.GetMask("Platform");
 
         anchor.gameObject.SetActive(true);
-        anchor.transform.position = ownAnchor.transform.position;
+        anchor.transform.position = rootAnchor.transform.position;
         anchor.MoveTo(target);
     }
     public void ShootCancel(){
@@ -61,26 +57,24 @@ public class RopeController : MonoBehaviour
         visual.InActive();
     }
     public void ToggleThrow(Vector2 target){
-        if(ownAnchor.state == Anchor.State.Fixed){
+        if(rootAnchor.state == Anchor.State.Fixed){
             ThrowCancel();
 
-            //Test
-            isPlayerOwn = true;
+            owner = defaultOwner;
         }
         else{
             Throw(target);
 
-            //Test
-            isPlayerOwn = false;
+            owner = null;
         }
     }
     private void Throw(Vector2 target){
-        ownAnchor.gameObject.SetActive(true);
-        ownAnchor.transform.position = transform.position;
-        ownAnchor.MoveTo(target);
+        rootAnchor.gameObject.SetActive(true);
+        rootAnchor.transform.position = transform.position;
+        rootAnchor.MoveTo(target);
     }
     private void ThrowCancel(){
-        ownAnchor.gameObject.SetActive(false);
-        ownAnchor.transform.position = transform.position;
+        rootAnchor.gameObject.SetActive(false);
+        rootAnchor.transform.position = transform.position;
     }
 }

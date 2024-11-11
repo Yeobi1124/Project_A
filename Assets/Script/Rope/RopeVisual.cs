@@ -6,12 +6,15 @@ using UnityEngine;
 public class RopeVisual : MonoBehaviour
 {
     public bool active = false;
+    [Header("Anchor")]
+    public Transform firstAnchor;
+    public Transform secondAnchor;
+    [Header("Visual Setting")]
     public int segementCount;
     public int constraitLoop;
     public float lineWidth;
     public float segmentLength;
-    public Transform firstAnchor;
-    public Transform secondAnchor;
+    [Header("Default Power")]
     public Vector2 gravity = new Vector2(0, 9.81f);
 
     private LineRenderer _lineRenderer;
@@ -41,10 +44,11 @@ public class RopeVisual : MonoBehaviour
         }
     }
 
-    public void Init(Transform firstAnchor, Transform secondAnchor){
-        this.firstAnchor = firstAnchor;
-        this.secondAnchor = secondAnchor;
-        
+    private void Awake() {
+        Init();
+    }
+    
+    public void Init(){
         Vector2 segementPos = firstAnchor.position;
         for(int i=0 ;i<segementCount;i++){
             segements.Add(new Segment(segementPos));
