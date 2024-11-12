@@ -6,10 +6,18 @@ public class MoveRope : MonoBehaviour
 {
     int power;
     float dir;
-    Rigidbody2D rigid;
+    Rigidbody2D _rigid;
+    Rigidbody2D rigid{
+        get{
+            if(_rigid==null && !TryGetComponent(out _rigid)){
+                Debug.LogWarning("Rigidbody2D is missing!");
+            }
+            return _rigid;
+        }
+        set => _rigid = value;
+    }
 
-    public void Init(Rigidbody2D rigid, int power) {
-        this.rigid = rigid;
+    public void Init(int power) {
         this.power = power;
     }
 

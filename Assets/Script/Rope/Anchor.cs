@@ -17,7 +17,7 @@ public class Anchor : MonoBehaviour
             }
             return _rigid;
         }
-        set {_rigid = value;}
+        set => _rigid = value;
     }
     Vector2 dir;
     private void OnEnable() { state = State.None; }
@@ -43,6 +43,6 @@ public class Anchor : MonoBehaviour
     
     public void Fix(){
         state = State.Fixed;
-        rigid.bodyType = RigidbodyType2D.Kinematic; // 움직이는 플랫폼 같은거 생각하면 Static 보단 Kinematic
+        rigid.bodyType = RigidbodyType2D.Static; // 움직이는 플랫폼 같은거 생각하면 Static 보단 Kinematic
     }
 }

@@ -5,12 +5,12 @@ using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
-    [Header("Player Property")]
-    private PlayerAttribute attribute;
-    private PlayerState state;
+    public Mediator mediator;
 
-    //Rope
-    public RopeController ropeController;
+    [HideInInspector]
+    public PlayerAttribute attribute;
+    [HideInInspector]
+    public PlayerState state;
 
     //Movement
     private MoveHorizion moveHorizion;
@@ -18,46 +18,70 @@ public class Player : MonoBehaviour
     private Jump jump;
 
     //기능 구현을 위한 변수들
-    private Camera cam;
     private Rigidbody2D rigid;
 
     private bool VecRemove; //Anchor 꽂을 때 튀어오르는 거 방지용 (이거 해도 뭔가 남아있음. 줄 길이도 발사, 고정 사이 길이보다 짧고)
+
+    //임시 저장
+    private Transform anchorTransform;
 
     private void Awake() {
         TryGetComponent(out attribute);
         TryGetComponent(out state);
 
-        //TryGetComponent(out ropeController);
         TryGetComponent(out moveHorizion);
         TryGetComponent(out moveRope);
         TryGetComponent(out jump);
 
         TryGetComponent(out rigid);
-        cam = GameObject.Find("Main Camera").GetComponent<Camera>();
 
         //Movement Init
-        moveHorizion.Init(rigid, attribute.moveHorizionSpeed);
-        jump.Init(rigid, attribute.jumpPower);
-        moveRope.Init(rigid, attribute.ropeMovePower);
+        moveHorizion.Init(attribute.moveHorizionSpeed);
+        jump.Init(attribute.jumpPower);
+        moveRope.Init(attribute.ropeMovePower);
     }
 
     private void FixedUpdate() {
-        if(!state.onAnchor || !state.hasMuffler){
-            rigid.freezeRotation = true;
-            transform.rotation = Quaternion.identity;
-            moveHorizion.UpdateAct();
+        switch(state.controltype){
+            case PlayerState.Controltype.Ground:
+                rigid.freezeRotation = true;
+                transform.rotation = Quaternion.identity;
+                moveHorizion.UpdateAct();
 
-            VecRemove = true;
+                VecRemove = true;
+                break;
+            case PlayerState.Controltype.Air:
+                break;
+            case PlayerState.Controltype.Rope:
+                rigid.freezeRotation = false;
+                if(VecRemove){
+                    rigid.velocity = new Vector2(0, 0);
+                    VecRemove = false;
+                }
+                if(state.isTight)
+                    moveRope.UpdateAct(anchorTransform.position);
+                break;
+            default:
+                break;
         }
-        else{
-            rigid.freezeRotation = false;
-            if(VecRemove){
-                rigid.velocity = new Vector2(0, 0);
-                VecRemove = false;
-            }
-            if(state.isTight)
-                moveRope.UpdateAct(ropeController.anchor.gameObject.transform.position);
-        }
+
+        // //if(!state.onAnchor || !state.hasMuffler){
+        // if(state.controltype == PlayerState.Controltype.Ground){
+        //     rigid.freezeRotation = true;
+        //     transform.rotation = Quaternion.identity;
+        //     moveHorizion.UpdateAct();
+
+        //     VecRemove = true;
+        // }
+        // else{
+        //     rigid.freezeRotation = false;
+        //     if(VecRemove){
+        //         rigid.velocity = new Vector2(0, 0);
+        //         VecRemove = false;
+        //     }
+        //     if(state.isTight)
+        //         moveRope.UpdateAct(anchorTransform.position);
+        // }
     }
 
     public void OnMove(InputAction.CallbackContext context){
@@ -73,20 +97,20 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void OnShoot(InputAction.CallbackContext context){ //목도리 발사
-        if(context.started){
-            ropeController.Shoot(cam.ScreenToWorldPoint(Input.mousePosition));
-        }
-        else if(context.canceled){
-            ropeController.ShootCancel();
-        }
-    }
+    // public void OnShoot(InputAction.CallbackContext context){ //목도리 발사
+    //     if(context.started){
+    //         ropeController.Shoot(cam.ScreenToWorldPoint(Input.mousePosition));
+    //     }
+    //     else if(context.canceled){
+    //         ropeController.ShootCancel();
+    //     }
+    // }
 
-    public void OnThrow(InputAction.CallbackContext context) //목도리 던지는거
-    {
-        if(context.started){
-            ropeController.ToggleThrow(cam.ScreenToWorldPoint(Input.mousePosition));
-            state.hasMuffler = !state.hasMuffler;
-        }
-    }
+    // public void OnThrow(InputAction.CallbackContext context) //목도리 던지는거
+    // {
+    //     if(context.started){
+    //         ropeController.ToggleThrow(cam.ScreenToWorldPoint(Input.mousePosition));
+    //         state.hasMuffler = !state.hasMuffler;
+    //     }
+    // }
 }
