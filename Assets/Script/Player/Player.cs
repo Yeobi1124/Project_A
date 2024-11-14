@@ -45,13 +45,12 @@ public class Player : MonoBehaviour
     private void FixedUpdate() {
         switch(state.controltype){
             case PlayerState.Controltype.Ground:
+            case PlayerState.Controltype.Air:
                 rigid.freezeRotation = true;
                 transform.rotation = Quaternion.identity;
                 moveHorizion.UpdateAct();
 
                 VecRemove = true;
-                break;
-            case PlayerState.Controltype.Air:
                 break;
             case PlayerState.Controltype.Rope:
                 rigid.freezeRotation = false;

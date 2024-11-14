@@ -21,7 +21,7 @@ public class RopePhysics : MonoBehaviour
     }
 
     private void FixedUpdate() {
-        isTight = distance < Vector3.Distance(rootAnchor.transform.position, anchor.transform.position);
+        isTight = springJoint2D.distance < Vector3.Distance(rootAnchor.transform.position, anchor.transform.position);
         springJoint2D.enabled = active && isTight;
     }
 
@@ -37,7 +37,7 @@ public class RopePhysics : MonoBehaviour
         //springJoint2D.autoConfigureConnectedAnchor = false;
         springJoint2D.connectedBody = anchor;
 
-        distance = Vector3.Distance(anchor.position, transform.position);
+        distance = Vector3.Distance(anchor.position, rootAnchor.transform.position);
         //springJoint2D.distance = distance;
     }
 }

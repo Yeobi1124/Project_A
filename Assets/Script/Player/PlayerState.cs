@@ -16,7 +16,7 @@ public class PlayerState : MonoBehaviour
     public bool isTight; // 줄이 팽팽한지, RopeController, Mediator에서 관리
     
 
-    public enum Controltype { Ground, Air, Rope }
+    public enum Controltype { None, Ground, Air, Rope }
     //Animator
     Animator anim;
 
@@ -44,7 +44,8 @@ public class PlayerState : MonoBehaviour
     private void UpdateControltype(){
         if(onGround) controltype = Controltype.Ground;
         else if(hasMuffler && isMufflerActive && isTight) controltype = Controltype.Rope;
-        else controltype = Controltype.Air;
+        else if(!hasMuffler || !isMufflerActive)controltype = Controltype.Air;
+        else controltype = Controltype.None;
     }
 
     private void UpdateAnimation(){

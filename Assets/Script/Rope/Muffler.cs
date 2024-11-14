@@ -139,6 +139,11 @@ public class Muffler : MonoBehaviour
     
     public void OnShoot(InputAction.CallbackContext context){ //목도리 발사
         if(context.started){
+            if(IsPlayerOwned)
+                anchor.transform.position = owner.transform.position;
+            else
+                anchor.transform.position = rootAnchor.transform.position;
+                
             Shoot(Camera.main.ScreenToWorldPoint(Input.mousePosition));
 
             if(IsPlayerOwned){
