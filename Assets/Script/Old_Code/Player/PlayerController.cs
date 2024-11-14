@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviour
     public PlayerMovement playerMovement;
     public PlayerRopeMovement playerRopeMovement;
     PlayerStateOld playerState;
-    public RopeController ropeController;
+    public Muffler ropeController;
     Camera cam;
 
     Animator animator;

@@ -24,9 +24,6 @@ public class PlayerState : MonoBehaviour
     Rigidbody2D rigid;
     float raycastLength = 1f;
 
-    public Anchor anchor;
-    public RopePhysics springRope;
-
     private void Awake() {
         TryGetComponent(out anim);
         TryGetComponent(out rigid);

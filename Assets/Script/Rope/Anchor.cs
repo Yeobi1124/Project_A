@@ -20,7 +20,7 @@ public class Anchor : MonoBehaviour
         set => _rigid = value;
     }
     Vector2 dir;
-    private void OnEnable() { state = State.None; }
+    private void OnEnable() { state = State.None; rigid.bodyType = RigidbodyType2D.Dynamic; }
     private void OnDisable() { state = State.None; }
     private void FixedUpdate() { if(state == State.Flying) rigid.velocity = dir * speed; }
     private void OnTriggerEnter2D(Collider2D other) {

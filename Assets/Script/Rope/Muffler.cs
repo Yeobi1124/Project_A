@@ -2,15 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Mediator;
 
-public class RopeController : MonoBehaviour
+public class Muffler : MonoBehaviour
 {
-    public Mediator mediator;
+    public AbstractMediator mediator;
 
     [Header("Owner")]
-    // 소유자 지정 방법 생각
-    public Rigidbody2D owner; // Character가 가지고 있으면 Character의 Rigidbody. Platform에 박혀있으면 null로
-    public Rigidbody2D defaultOwner;
+    public Rigidbody2D owner; // 어떤 Character가 가지는지
 
     [Header("Property")]
     public RopePhysics physics;
@@ -20,6 +19,54 @@ public class RopeController : MonoBehaviour
 
     [Header("Attribute")]
     public float range;
+
+    // Rope State
+    [SerializeField]
+    private bool isPlayerOwned;
+    private bool IsPlayerOwned
+    {
+        get => isPlayerOwned;
+        set
+        {
+            isPlayerOwned = value;
+            if(mediator != null){
+                mediator.Notify(this, "isPlayerOwned", isPlayerOwned);
+            }
+        }
+    }
+    [SerializeField]
+    private bool physicsActive;
+    private bool PhysicsActive
+    {
+        get => physicsActive;
+        set{
+            physicsActive = value;
+            if(mediator != null){
+                mediator.Notify(this, "isActive", physicsActive);
+            }
+        }
+    }
+    [SerializeField]
+    private bool isTight;
+    private bool IsTight{
+        get => isTight;
+        set
+        {
+            isTight = value;
+            if(mediator != null){
+                mediator.Notify(this, "isTight", isTight);
+            }
+        }
+    }
+
+    private void Start() {
+
+
+        FixedJoint2D fixedJoint2D = rootAnchor.GetComponent<FixedJoint2D>();
+        if(fixedJoint2D != null){
+            fixedJoint2D.connectedBody = owner;
+        }
+    }
 
     private void Update() {
         DebugTool.DrawCircle(rootAnchor.transform.position, range); //범위 표시
@@ -36,6 +83,7 @@ public class RopeController : MonoBehaviour
                 anchor.Fix();
                 
                 physics.Active();
+                PhysicsActive = true;
 
                 visual.Active();
                 visual.segmentLength = (anchor.transform.position - rootAnchor.transform.position).magnitude / visual.segementCount;
@@ -55,10 +103,15 @@ public class RopeController : MonoBehaviour
             default:
                 break;
         }
+
+        // State Update
+        if(IsTight != physics.isTight){ //set 연산이 mediator로 비용이 큰 연산이 되서 최적화용
+            IsTight = physics.isTight;
+        }
     }
 
     public void Shoot(Vector2 target){
-        if(owner == null) anchor.collisionLayerMask = LayerMask.GetMask("Character");
+        if(!IsPlayerOwned) anchor.collisionLayerMask = LayerMask.GetMask("Character");
         else anchor.collisionLayerMask = LayerMask.GetMask("Platform");
 
         anchor.gameObject.SetActive(true);
@@ -69,21 +122,9 @@ public class RopeController : MonoBehaviour
         anchor.gameObject.SetActive(false);
         
         physics.InActive();
+        PhysicsActive = false;
+
         visual.InActive();
-    }
-    public void ToggleThrow(Vector2 target){
-        if(rootAnchor.state == Anchor.State.Fixed){
-            ThrowCancel();
-
-            owner = defaultOwner;
-            mediator?.Notify(this, "isThrown", true);
-        }
-        else{
-            Throw(target);
-
-            owner = null;
-            mediator?.Notify(this, "isThrown", false);
-        }
     }
     private void Throw(Vector2 target){
         rootAnchor.gameObject.SetActive(true);
@@ -99,16 +140,36 @@ public class RopeController : MonoBehaviour
     public void OnShoot(InputAction.CallbackContext context){ //목도리 발사
         if(context.started){
             Shoot(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+
+            if(IsPlayerOwned){
+                rootAnchor.transform.position = owner.transform.position;
+                rootAnchor.gameObject.SetActive(true);
+                rootAnchor.GetComponent<FixedJoint2D>().enabled = true;
+            }
         }
         else if(context.canceled){
             ShootCancel();
+
+            if(IsPlayerOwned){
+                rootAnchor.gameObject.SetActive(false);
+                rootAnchor.GetComponent<FixedJoint2D>().enabled = false;
+            }
         }
     }
 
     public void OnThrow(InputAction.CallbackContext context) //목도리 던지는거
     {
         if(context.started){
-            ToggleThrow(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+            if(rootAnchor.state == Anchor.State.Fixed){
+                ThrowCancel();
+
+                IsPlayerOwned = true;
+            }
+            else{
+                Throw(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+
+                IsPlayerOwned = false;
+            }
         }
     }
 }

@@ -5,33 +5,39 @@ using UnityEngine;
 // use SpringJoint2D
 public class RopePhysics : MonoBehaviour
 {
-    public SpringJoint2D springJoint2D;
+    private SpringJoint2D springJoint2D;
     public Rigidbody2D anchor;
+    public Rigidbody2D rootAnchor;
     public float distance;
     public bool active = false;
     public bool isTight;
 
-    private void FixedUpdate() {
-        if(active){
-            springJoint2D.enabled = distance <= Vector3.Distance(transform.position, anchor.position);
+    private void Start() {
+        springJoint2D = rootAnchor.GetComponent<SpringJoint2D>();
+
+        if(springJoint2D == null){
+            Debug.LogWarning("Root Anchor's SpringJoint2D is missing");
         }
+    }
+
+    private void FixedUpdate() {
+        isTight = distance < Vector3.Distance(rootAnchor.transform.position, anchor.transform.position);
+        springJoint2D.enabled = active && isTight;
     }
 
     public void InActive(){
         active = false;
 
-        springJoint2D.enabled = false;
         springJoint2D.connectedBody = null;
     }
 
     public void Active(){
         active = true;
 
-        springJoint2D.enabled = true;
-        springJoint2D.autoConfigureConnectedAnchor = false;
+        //springJoint2D.autoConfigureConnectedAnchor = false;
         springJoint2D.connectedBody = anchor;
 
         distance = Vector3.Distance(anchor.position, transform.position);
-        springJoint2D.distance = distance;
+        //springJoint2D.distance = distance;
     }
 }

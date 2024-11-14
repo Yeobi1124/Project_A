@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Mediator;
 
 public class Player : MonoBehaviour
 {
-    public Mediator mediator;
+    public AbstractMediator mediator;
 
     [HideInInspector]
     public PlayerAttribute attribute;
@@ -23,7 +24,7 @@ public class Player : MonoBehaviour
     private bool VecRemove; //Anchor 꽂을 때 튀어오르는 거 방지용 (이거 해도 뭔가 남아있음. 줄 길이도 발사, 고정 사이 길이보다 짧고)
 
     //임시 저장
-    private Transform anchorTransform;
+    public Transform anchorTransform;
 
     private void Awake() {
         TryGetComponent(out attribute);
@@ -64,24 +65,6 @@ public class Player : MonoBehaviour
             default:
                 break;
         }
-
-        // //if(!state.onAnchor || !state.hasMuffler){
-        // if(state.controltype == PlayerState.Controltype.Ground){
-        //     rigid.freezeRotation = true;
-        //     transform.rotation = Quaternion.identity;
-        //     moveHorizion.UpdateAct();
-
-        //     VecRemove = true;
-        // }
-        // else{
-        //     rigid.freezeRotation = false;
-        //     if(VecRemove){
-        //         rigid.velocity = new Vector2(0, 0);
-        //         VecRemove = false;
-        //     }
-        //     if(state.isTight)
-        //         moveRope.UpdateAct(anchorTransform.position);
-        // }
     }
 
     public void OnMove(InputAction.CallbackContext context){
@@ -96,21 +79,4 @@ public class Player : MonoBehaviour
             jump.Act();
         }
     }
-
-    // public void OnShoot(InputAction.CallbackContext context){ //목도리 발사
-    //     if(context.started){
-    //         ropeController.Shoot(cam.ScreenToWorldPoint(Input.mousePosition));
-    //     }
-    //     else if(context.canceled){
-    //         ropeController.ShootCancel();
-    //     }
-    // }
-
-    // public void OnThrow(InputAction.CallbackContext context) //목도리 던지는거
-    // {
-    //     if(context.started){
-    //         ropeController.ToggleThrow(cam.ScreenToWorldPoint(Input.mousePosition));
-    //         state.hasMuffler = !state.hasMuffler;
-    //     }
-    // }
 }
