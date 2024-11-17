@@ -10,4 +10,5 @@ public class PlayerAttribute : MonoBehaviour
     public int moveHorizionSpeed;
     public int jumpPower;
     public int ropeMovePower;
+    public int dashRopePower;
 }

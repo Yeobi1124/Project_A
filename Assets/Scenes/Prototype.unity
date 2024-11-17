@@ -228,6 +228,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 37fa2a14-caee-4941-b1f3-5ec11052c007
     m_ActionName: PlayerActions/MouseRight[/Mouse/rightButton]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 548078708}
+        m_TargetAssemblyTypeName: Player, Assembly-CSharp
+        m_MethodName: OnDash
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 9b3f87dc-af0f-4069-b785-478e1ea3b92e
+    m_ActionName: PlayerActions/New action
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: PlayerActions
@@ -468,6 +484,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7244129008932223529, guid: 273a20503d6bb1046aaa3aa49c63b166, type: 3}
+      propertyPath: dashRopePower
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 7592485117127832258, guid: 273a20503d6bb1046aaa3aa49c63b166, type: 3}
       propertyPath: hasMuffler
       value: 1
@@ -487,14 +507,17 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8033421636520765646, guid: 273a20503d6bb1046aaa3aa49c63b166, type: 3}
+      insertIndex: 9
+      addedObject: {fileID: 971586439}
   m_SourcePrefab: {fileID: 100100000, guid: 273a20503d6bb1046aaa3aa49c63b166, type: 3}
 --- !u!114 &548078708 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8505166786156802026, guid: 273a20503d6bb1046aaa3aa49c63b166, type: 3}
   m_PrefabInstance: {fileID: 548078707}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 971586428}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 40d87d155f6a2e1469b37cdafc3cdd30, type: 3}
@@ -621,6 +644,23 @@ Transform:
   - {fileID: 2115058895}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &971586428 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8033421636520765646, guid: 273a20503d6bb1046aaa3aa49c63b166, type: 3}
+  m_PrefabInstance: {fileID: 548078707}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &971586439
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 971586428}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfa73fdfe2ae9ff42b3d824a0f8a6c6f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1041703191
 GameObject:
   m_ObjectHideFlags: 3

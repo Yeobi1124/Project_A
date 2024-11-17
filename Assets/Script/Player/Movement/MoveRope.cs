@@ -29,7 +29,7 @@ public class MoveRope : MonoBehaviour
         Vector3 forceDir = Quaternion.Euler(0, 0, -90) * (anchorPos - transform.position).normalized * dir * power;
         rigid.AddForce(forceDir,ForceMode2D.Force);
 
-        Debug.DrawRay(transform.position, forceDir, Color.red);
+        Debug.DrawRay(transform.position, forceDir.normalized, Color.red);
         Debug.DrawRay(transform.position, anchorPos - transform.position, Color.green);
     }
 }

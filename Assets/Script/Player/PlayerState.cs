@@ -22,7 +22,7 @@ public class PlayerState : MonoBehaviour
 
     //object For State Update
     Rigidbody2D rigid;
-    float raycastLength = 1f;
+    float raycastLength = 0.6f;
 
     private void Awake() {
         TryGetComponent(out anim);

@@ -17,6 +17,7 @@ public class Player : MonoBehaviour
     private MoveHorizion moveHorizion;
     private MoveRope moveRope;
     private Jump jump;
+    private DashRope _dashRope;
 
     //기능 구현을 위한 변수들
     private Rigidbody2D rigid;
@@ -33,6 +34,7 @@ public class Player : MonoBehaviour
         TryGetComponent(out moveHorizion);
         TryGetComponent(out moveRope);
         TryGetComponent(out jump);
+        TryGetComponent(out _dashRope);
 
         TryGetComponent(out rigid);
 
@@ -40,6 +42,7 @@ public class Player : MonoBehaviour
         moveHorizion.Init(attribute.moveHorizionSpeed);
         jump.Init(attribute.jumpPower);
         moveRope.Init(attribute.ropeMovePower);
+        _dashRope.Init(attribute.dashRopePower);
     }
 
     private void FixedUpdate() {
@@ -71,11 +74,23 @@ public class Player : MonoBehaviour
 
         moveHorizion.Act(value);
         moveRope.Act(value);
+        _dashRope.SetDir((int)value);
     }
 
     public void OnJump(InputAction.CallbackContext context){
         if(context.started){
             jump.Act();
+        }
+    }
+
+    public void OnDash(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            if (state.controltype == PlayerState.Controltype.Rope)
+            {
+                _dashRope.Act(anchorTransform.position);
+            }
         }
     }
 }
