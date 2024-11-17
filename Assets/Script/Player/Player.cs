@@ -50,14 +50,14 @@ public class Player : MonoBehaviour
                 transform.rotation = Quaternion.identity;
                 moveHorizion.UpdateAct();
 
-                VecRemove = true;
+                // VecRemove = true;
                 break;
             case PlayerState.Controltype.Rope:
                 rigid.freezeRotation = false;
-                if(VecRemove){
-                    rigid.velocity = new Vector2(0, 0);
-                    VecRemove = false;
-                }
+                // if(VecRemove){
+                //     rigid.velocity = new Vector2(0, 0);
+                //     VecRemove = false;
+                // }
                 if(state.isTight)
                     moveRope.UpdateAct(anchorTransform.position);
                 break;

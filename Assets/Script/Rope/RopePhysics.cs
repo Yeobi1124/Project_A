@@ -37,7 +37,7 @@ public class RopePhysics : MonoBehaviour
         //springJoint2D.autoConfigureConnectedAnchor = false;
         springJoint2D.connectedBody = anchor;
 
-        distance = Vector3.Distance(anchor.position, rootAnchor.transform.position);
+        springJoint2D.distance = Vector3.Distance(anchor.position, rootAnchor.transform.position);
         //springJoint2D.distance = distance;
     }
 }

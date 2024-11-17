@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Mediator;
+using UnityEngine.Serialization;
 
 public class Muffler : MonoBehaviour
 {
     public AbstractMediator mediator;
 
     [Header("Owner")]
-    public Rigidbody2D owner; // 어떤 Character가 가지는지
+    public Rigidbody2D ownerJointPoint; // 어떤 Character가 가지는지
 
     [Header("Property")]
     public RopePhysics physics;
@@ -64,7 +65,7 @@ public class Muffler : MonoBehaviour
 
         FixedJoint2D fixedJoint2D = rootAnchor.GetComponent<FixedJoint2D>();
         if(fixedJoint2D != null){
-            fixedJoint2D.connectedBody = owner;
+            fixedJoint2D.connectedBody = ownerJointPoint;
         }
     }
 
@@ -128,7 +129,7 @@ public class Muffler : MonoBehaviour
     }
     private void Throw(Vector2 target){
         rootAnchor.gameObject.SetActive(true);
-        rootAnchor.transform.position = transform.position;
+        // rootAnchor.transform.position = transform.position;
         rootAnchor.MoveTo(target);
     }
     private void ThrowCancel(){
@@ -139,18 +140,15 @@ public class Muffler : MonoBehaviour
     
     public void OnShoot(InputAction.CallbackContext context){ //목도리 발사
         if(context.started){
-            if(IsPlayerOwned)
-                anchor.transform.position = owner.transform.position;
-            else
-                anchor.transform.position = rootAnchor.transform.position;
-                
-            Shoot(Camera.main.ScreenToWorldPoint(Input.mousePosition));
-
             if(IsPlayerOwned){
-                rootAnchor.transform.position = owner.transform.position;
+                rootAnchor.transform.position = ownerJointPoint.transform.position;
                 rootAnchor.gameObject.SetActive(true);
                 rootAnchor.GetComponent<FixedJoint2D>().enabled = true;
+                
+                rootAnchor.collisionLayerMask = LayerMask.GetMask();
             }
+            
+            Shoot(Camera.main.ScreenToWorldPoint(Input.mousePosition));
         }
         else if(context.canceled){
             ShootCancel();
@@ -166,11 +164,15 @@ public class Muffler : MonoBehaviour
     {
         if(context.started){
             if(rootAnchor.state == Anchor.State.Fixed){
+                rootAnchor.transform.position = ownerJointPoint.transform.position;
+                rootAnchor.collisionLayerMask = LayerMask.GetMask();
                 ThrowCancel();
 
                 IsPlayerOwned = true;
             }
             else{
+                rootAnchor.transform.position = ownerJointPoint.transform.position;
+                rootAnchor.collisionLayerMask = LayerMask.GetMask("Platform");
                 Throw(Camera.main.ScreenToWorldPoint(Input.mousePosition));
 
                 IsPlayerOwned = false;
