@@ -7366,6 +7366,14 @@ PrefabInstance:
       propertyPath: ownerJointPoint
       value: 
       objectReference: {fileID: 1305470036}
+    - target: {fileID: 6758625406696157130, guid: ddd411e40a8e01542a58d51e33c81d6a, type: 3}
+      propertyPath: lineWidth
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 6758625406696157130, guid: ddd411e40a8e01542a58d51e33c81d6a, type: 3}
+      propertyPath: segementCount
+      value: 15
+      objectReference: {fileID: 0}
     - target: {fileID: 7969077170612559484, guid: ddd411e40a8e01542a58d51e33c81d6a, type: 3}
       propertyPath: m_SortingOrder
       value: -3
